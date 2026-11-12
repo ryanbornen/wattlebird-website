@@ -54,7 +54,7 @@ h2 { color: var(--gum); font-size: 1.5rem; margin: 0 0 18px; }
 .tag { align-self: flex-start; font-size: .75rem; font-weight: 700; padding: 3px 9px; border-radius: 99px; background: var(--wattle-soft); color: #7a5b00; }
 .tag.soon { background: #eef2f0; color: var(--gum-2); }
 .appicon { width: 64px; height: 64px; }
-.appicon svg { width: 100%; height: 100%; display: block; }
+.appicon svg, .appicon img { width: 100%; height: 100%; display: block; }
 .btn { display: inline-block; background: var(--gum); color: #fff; text-decoration: none; padding: 11px 18px; border-radius: 10px; font-weight: 700; }
 .btn:hover { background: var(--gum-2); color: #fff; }
 .btn.ghost { background: transparent; color: var(--gum); border: 1px solid var(--line); }
