@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free 3D print cost calculator | Wattlebird Software | Wattlebird Software</title>
+<meta name="description" content="Free 3D print cost calculator: work out filament, electricity and extras for any print, and what to charge.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:18px 0}
+.calc label{display:block;font-weight:600;font-size:.9rem;margin-bottom:4px}
+.calc input{width:100%;padding:10px 12px;border:1px solid #d9d4c7;border-radius:10px;font:inherit;background:#fff;box-sizing:border-box}
+.result{background:#fff;border:1px solid #e4e0d4;border-radius:14px;padding:18px 20px}
+.result table{width:100%;border-collapse:collapse}.result td{padding:6px 0;border-bottom:1px solid #efece4}.result td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.result .big td{font-weight:800;font-size:1.15rem;border-bottom:0;padding-top:12px}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="index.html"><svg viewBox="0 0 100 100" aria-hidden="true">
+  <rect width="100" height="100" rx="22" fill="#24453a"/>
+  <path d="M16 28l12 46 12-30 12 30 10-38" fill="none" stroke="#fbfaf6" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="68" cy="30" r="10" fill="#fbfaf6"/><path d="M77 28l11 3-10 4z" fill="#e8b31a"/><circle cx="70" cy="28" r="2.2" fill="#24453a"/>
+</svg><b>Wattlebird Software</b></a>
+  <nav><a href="index.html#apps">Apps</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a></nav>
+</div></header>
+<main>
+<div class="wrap prose">
+  <h1>3D print cost calculator</h1>
+  <p class="meta">Free &middot; Works out filament, power and extras, and a selling price</p>
+  <p>Enter the numbers from your slicer and your filament. Everything is worked out in your browser; nothing is sent anywhere.</p>
+  <div class="calc">
+    <div><label for="spoolPrice">Spool price ($)</label><input id="spoolPrice" type="number" inputmode="decimal" value="28" min="0" step="0.01"></div>
+    <div><label for="spoolGrams">Spool size (g)</label><input id="spoolGrams" type="number" inputmode="decimal" value="1000" min="1"></div>
+    <div><label for="grams">Filament used (g)</label><input id="grams" type="number" inputmode="decimal" value="145" min="0"></div>
+    <div><label for="hours">Print time (hours)</label><input id="hours" type="number" inputmode="decimal" value="6.3" min="0" step="0.1"></div>
+    <div><label for="watts">Printer power (watts)</label><input id="watts" type="number" inputmode="decimal" value="110" min="0"></div>
+    <div><label for="kwh">Electricity ($ per kWh)</label><input id="kwh" type="number" inputmode="decimal" value="0.35" min="0" step="0.01"></div>
+    <div><label for="extras">Extras ($): paint, magnets, packaging</label><input id="extras" type="number" inputmode="decimal" value="2.5" min="0" step="0.01"></div>
+    <div><label for="markup">Markup (%)</label><input id="markup" type="number" inputmode="decimal" value="150" min="0"></div>
+  </div>
+  <div class="result" aria-live="polite">
+    <table>
+      <tr><td>Filament</td><td id="rFil">–</td></tr>
+      <tr><td>Electricity</td><td id="rPow">–</td></tr>
+      <tr><td>Extras</td><td id="rExt">–</td></tr>
+      <tr><td><b>Total cost</b></td><td id="rTot">–</td></tr>
+      <tr class="big"><td>Suggested price</td><td id="rSell">–</td></tr>
+    </table>
+  </div>
+  <p class="meta" style="margin-top:12px">Filament = grams × (spool price ÷ spool size). Electricity = watts ÷ 1000 × hours × price per kWh. Suggested price = total cost × (1 + markup ÷ 100).</p>
+
+  <h2>Doing this for every print?</h2>
+  <p><a href="printledger.html"><b>PrintLedger</b></a> does it automatically for every job, keeps track of what's left on each spool, shows your monthly totals and money lost to failed prints, and sends customers a PDF quote. One-off price, no subscription.</p>
+  <p><a href="printledger.html">See PrintLedger →</a></p>
+  <script>
+  (function(){
+    var ids=['spoolPrice','spoolGrams','grams','hours','watts','kwh','extras','markup'];
+    var money=function(n){return isFinite(n)?'$'+n.toFixed(2):'–'};
+    function v(id){var x=parseFloat(document.getElementById(id).value);return isFinite(x)&&x>=0?x:0}
+    function calc(){
+      var size=v('spoolGrams')||1;
+      var fil=v('grams')*(v('spoolPrice')/size);
+      var pow=v('watts')/1000*v('hours')*v('kwh');
+      var ext=v('extras');
+      var tot=fil+pow+ext;
+      document.getElementById('rFil').textContent=money(fil);
+      document.getElementById('rPow').textContent=money(pow);
+      document.getElementById('rExt').textContent=money(ext);
+      document.getElementById('rTot').textContent=money(tot);
+      document.getElementById('rSell').textContent=money(tot*(1+v('markup')/100));
+    }
+    ids.forEach(function(id){document.getElementById(id).addEventListener('input',calc)});
+    calc();
+  })();
+  </script>
+</div>
+</main>
+<footer class="site"><div class="wrap">
+  <div>&copy; 2026 Wattlebird Software &middot; ABN 16 538 424 771 &middot; Sydney, Australia</div>
+  <div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="support.html">Support</a><a href="mailto:hello@wattlebirdsoftware.com.au">hello@wattlebirdsoftware.com.au</a></div>
+</div></footer>
+</body>
+</html>
